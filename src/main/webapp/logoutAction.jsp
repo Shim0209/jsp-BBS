@@ -4,9 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>JSP 게시판 웹 사이</title>
+<title>로그아웃</title>
 </head>
 <body>
+	<%
+	session.invalidate();
+	%>
 	<script>
 		location.href = 'main.jsp';
 	</script>
