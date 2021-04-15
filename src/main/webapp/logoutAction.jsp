@@ -9,6 +9,7 @@
 <body>
 	<%
 	session.invalidate();
+	//response.sendRedirect("main.jsp"); ???
 	%>
 	<script>
 		location.href = 'main.jsp';
