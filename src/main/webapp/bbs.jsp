@@ -19,6 +19,44 @@
 	}
 	
 </style>
+<script type="text/javascript">
+	var request = new XMLHttpRequest();
+	function searchFunction() {
+		request.open("Post","./BbsSearchServlet?bbsTitle=" + encodeURIComponent(document.getElementById("searchKey").value), true);
+		request.onreadystatechange = searchProcess;
+		request.send(null);
+		
+	}
+	function searchProcess() {
+		var table = document.getElementById("bbsTable");
+		
+		table.innerHTML = "";
+		
+		if (request.readyState == 4 && request.status == 200) {
+			
+			var object = eval('(' + request.responseText + ')');
+			console.log('--obj--');
+			console.log(object);
+			
+			var result = object.result;
+			console.log('--result--');
+			console.log(result);
+			
+			for(var i=0; i < result.length; i++) {
+				var row = table.insertRow(0);
+				
+				for(var j=0; j < result[i].length; j++) {
+					var cell = row.insertCell(j);
+					
+					cell.innerHTML = result[i][j].value;
+					
+				}
+			}
+			
+		}
+		
+	}
+</script>
 </head>
 <body>
 	<%
@@ -83,6 +121,14 @@
 	</nav>
 	
 	<div class="container">
+		<div class="form-group row pull-right">
+			<div class="col-xs-8">
+				<input class="form-control" type="text" size="20" id="searchKey" onkeyup="searchFunction()">
+			</div>
+			<div class="col-xs-2">
+				<button class="btn btn-primary" type="button" onclick="searchFunction()">검색</button>
+			</div>
+		</div>
 		<div class="row">
 			<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd;">
 				<thead>
@@ -93,7 +139,7 @@
 						<th style="background-color: #eeeeee; text-align: center;">작성일</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="bbsTable">
 					<%
 						BbsDAO bbsDAO = new BbsDAO();
 						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
